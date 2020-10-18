@@ -13,7 +13,7 @@ function rtfe_dom_new (parent_id, id, node_type) {
 function rtfe_component (id, node_type, text) {
    var new_node = document.createElement (node_type);
    new_node.id = id;
-   new_node.textContent = text;
+   new_node.innerHTML = text;
    for (var i=3; i<arguments.length; i++) {
       new_node.appendChild (arguments[i]);
    }
@@ -36,7 +36,7 @@ function rtfe_form (id, action) {
 function rtfe_form_button (id, text, onclick) {
    var button = document.createElement ("button");
    button.id = id;
-   button.textContent = text;
+   button.innerHTML = text;
    button.addEventListener ("click", onclick);
    return button;
 }
@@ -67,7 +67,7 @@ function rtfe_form_password (id, name) {
 function rtfe_form_checkbox (id, name, label, checked) {
    var el = document.createElement ("label");
    el.setAttribute ("for", id);
-   el.textContent = label;
+   el.innerHTML = label;
    var new_node = rtfe_form_input (id, name, "");
    new_node.setAttribute ("type", "checkbox");
    new_node.value = "true";
@@ -111,7 +111,7 @@ function rtfe_form_select_option (id, value, label) {
    var new_node = document.createElement ("option");
    new_node.id = id;
    new_node.value = value;
-   new_node.textContent = label;
+   new_node.innerHTML = label;
    return new_node;
 }
 
@@ -126,7 +126,7 @@ function rtfe_form_file (id, name, filter, multiple) {
    return new_node;
 }
 
-function rtfe_grid_container (id, colspec, rowspec) {
+function rtfe_grid_container (id, rowspec, colspec) {
    var new_node = document.createElement ("div");
    new_node.id = id;
    new_node.style.display = "grid";
@@ -153,8 +153,8 @@ function rtfe_grid_item (id, rowspec, colspec, component) {
    return component;
 }
 
-function rtfe_quickgrid (id, colspec, rowspec) {
-   var new_node = rtfe_grid_container (id, colspec, rowspec);
+function rtfe_quickgrid (id, rowspec, colspec) {
+   var new_node = rtfe_grid_container (id, rowspec, colspec);
    new_node.id = id;
    new_node.style.display = "grid";
    new_node.style.gridTemplateColumns = colspec;
@@ -261,6 +261,14 @@ function rtfe_collect_form_data (form_id) {
    return ret;
 }
 
+function rtfe_form_colorpicker (id, name, textContent, color) {
+   var new_node = rtfe_form_input (id, name, "");
+   new_node.innerHTML = textContent;
+   new_node.type = "color";
+   new_node.value = color;
+   return new_node;
+}
+
 function rtfe_set_props (properties) {
    for (var i=1; i<arguments.length; i++) {
       if (!(properties.hasOwnProperty (arguments[i][0]))) {
@@ -297,12 +305,40 @@ function rtfe_rtfe (id, name, properties) {
     *
     */
 
+   // TODO: caller must supply images for the buttons, or accept the text that we use.
    properties = rtfe_set_props (properties,
                                 [ "outer_grid_class", "NewClass"  ],
                                 [ "outer_grid_tc",    "NewTC"     ],
                                 [ "processed",        true        ]
                                );
 
-   // var ret = rtfe_grid_container (id, name, "1fr", 
+   var ret =
+      rtfe_grid_container (id, "auto", "1fr",
+         rtfe_quickgrid (id + "-tbgrid", "auto", "100px 80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+            rtfe_form_select (id + "-fontsel", "FontSel", 1, "",
+               rtfe_form_select_option ("", "Font1", "Font1"),
+               rtfe_form_select_option ("", "Font2", "Font2"),
+               rtfe_form_select_option ("", "Font3", "Font3"),
+               rtfe_form_select_option ("", "Font4", "Font4")),
+            rtfe_form_select (id + "-fontsize", "FontSize", 1, "",
+               rtfe_form_select_option ("", "s10", "10"),
+               rtfe_form_select_option ("", "s11", "11"),
+               rtfe_form_select_option ("", "s12", "12"),
+               rtfe_form_select_option ("", "s13", "13"),
+               rtfe_form_select_option ("", "s14", "14")),
+            rtfe_form_colorpicker (id + "-bgcolor", "bgcolor", "BG", "white"),
+            rtfe_form_colorpicker (id + "-fgcolor", "fgcolor", "FG", "black"),
+            rtfe_form_button (id + "-bold", "<b>B</b>", null),
+            rtfe_form_button (id + "-italic", "<i>I</i>", null),
+            rtfe_form_button (id + "-underline", "<u>U</u>", null),
+            rtfe_form_button (id + "-left-just", "꜔", null),
+            rtfe_form_button (id + "-right-just", "˧", null),
+            rtfe_form_button (id + "-full-just", "꜔˧", null),
+            rtfe_form_button (id + "-ul", "UL", null),
+            rtfe_form_button (id + "-ol", "OL", null)));
+
+   ret.classList.add (properties.outer_grid_class);
+   return ret;
+
 }
 

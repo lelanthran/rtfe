@@ -86,7 +86,7 @@ rtfe_append ("main", rtfe_form_button ("Button2", "Hide",
 var new_form =
    rtfe_component ("div-1", "div", "MyDiv",
       rtfe_form ("form-1", "",
-         rtfe_grid_container ("container-1", "100px 300px 1fr", "auto",
+         rtfe_grid_container ("container-1", "auto", "100px 300px 1fr",
             rtfe_grid_item ("id-1-1", "1", "1", rtfe_component ("lb-1", "p", "Name")),
             rtfe_grid_item ("id-1-2", "1", "2", rtfe_form_input ("in-1", "username", "Name")),
             rtfe_grid_item ("id-2-1", "2", "1", rtfe_component ("lb-2", "p", "Password")),
@@ -97,7 +97,7 @@ var new_form =
             rtfe_form_hidden ("hid-1", "hname", "HiddenValue"),
             rtfe_grid_item ("id-5-2", "5", "3",
                rtfe_component ("id-5-20", "p", "",
-               rtfe_quickgrid ("id-qg-1", "50px 300px", "auto",
+               rtfe_quickgrid ("id-qg-1", "auto", "50px 300px",
                   rtfe_form_radio ("in-5-21", "FavB", "FF",   "unchecked"), rtfe_component ("", "s", "FireFox"),
                   rtfe_form_radio ("in-5-22", "FavB", "FFOS", "unchecked"), rtfe_component ("", "span", "FireFoxOS"),
                   rtfe_form_radio ("in-5-23", "FavB", "IE",   "unchecked"), rtfe_component ("", "b", "Internet Explorer"),
@@ -210,7 +210,10 @@ var properties = {
 "outer_grid_tc":        "OldTC",
 };
 
-rtfe_rtfe ("id", "name", properties);
+var editor_component = rtfe_rtfe ("id", "name", properties);
+
+rtfe_append ("main", editor_component);
+
 
    </script>
 </body>
