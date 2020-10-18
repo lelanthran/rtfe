@@ -202,8 +202,15 @@ var fields = [
    [ "textContent", "csdcsdcsc" ],
 ];
 
+// This is kinda ugly too
 // apply (root, fields, "id1", "id2", "id3");
 
+var properties = {
+"outer_grid_class":     "OldClass",
+"outer_grid_tc":        "OldTC",
+};
+
+rtfe_rtfe ("id", "name", properties);
 
    </script>
 </body>
