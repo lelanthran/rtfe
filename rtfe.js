@@ -269,6 +269,15 @@ function rtfe_form_colorpicker (id, name, textContent, color) {
    return new_node;
 }
 
+function rtfe_form_textarea (id, name, rows, cols) {
+   var new_node = document.createElement ("textarea");
+   new_node.id = id;
+   new_node.rows = rows;
+   new_node.cols = cols;
+
+   return new_node;
+}
+
 function rtfe_set_props (properties) {
    for (var i=1; i<arguments.length; i++) {
       if (!(properties.hasOwnProperty (arguments[i][0]))) {
@@ -335,7 +344,16 @@ function rtfe_rtfe (id, name, properties) {
             rtfe_form_button (id + "-right-just", "˧", null),
             rtfe_form_button (id + "-full-just", "꜔˧", null),
             rtfe_form_button (id + "-ul", "UL", null),
-            rtfe_form_button (id + "-ol", "OL", null)));
+            rtfe_form_button (id + "-ol", "OL", null)),
+         rtfe_quickgrid (id + "-tbgrid", "auto", "200px 200px",
+            rtfe_form_button (id + "-cancel-top", "Cancel", null),
+            rtfe_form_button (id + "-save-top", "Save", null)),
+         rtfe_form_textarea (id + "-textarea", name + "-textarea", properties.textarea_rows,
+                                                                   properties.textarea_cols),
+         rtfe_quickgrid (id + "-tbgrid", "auto", "200px 200px",
+            rtfe_form_button (id + "-cancel-top", "Cancel", null),
+            rtfe_form_button (id + "-save-top", "Save", null)));
+
 
    ret.classList.add (properties.outer_grid_class);
    return ret;
