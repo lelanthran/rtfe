@@ -218,7 +218,6 @@ function rtfe_post (url, form_data, handler) {
       method: 'POST',
       body: form_data,
    }).then ((response) => {
-      console.log ("calling handler: (" + response + ")");
       handler (response);
    });
 }
@@ -228,7 +227,6 @@ function rtfe_collect_form_data (form_id) {
    var ret = new FormData ();
    var els = form.getElementsByTagName ("input");
    for (var i=0; i<els.length; i++) {
-      console.log (els[i].name + ":" + els[i].type + ":" + els[i].value);
       if (els[i].type === "checkbox" || els[i].type === "radio") {
           if (els[i].checked) {
              ret.append (els[i].name, els[i].value);
@@ -239,7 +237,6 @@ function rtfe_collect_form_data (form_id) {
          for (var j=0; j<els[i].files.length; j++) {
             var file = els[i].files[j];
             var varname = els[i].name;
-            console.log ("Appending file " + varname + ":" + file.name);
             ret.append (varname, file);
          }
          continue;
@@ -262,5 +259,40 @@ function rtfe_collect_form_data (form_id) {
       }
    }
    return ret;
+}
+
+function rtfe_rtfe (id, name) {
+   /*
+    *    +-OuterGrid-1fr-----------------------------------------------------------+
+    *    |  +-ToolbarGrid-1fr-8x128px-------------------------------------------+  |
+    *    |  |   +----+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+   |  |
+    *    |  |   |FONT| |Sz| |BG| |FG| |Bd| |Ul| |Il| |Lj| |Fj| |Rj| |B.| |Bn|   |  |
+    *    |  |   +----+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+ +--+   |  |
+    *    |  +-------------------------------------------------------------------+  |
+    * ___|_________________________________________________________________________|___
+    *    |  +-CancelBtn-+ +SaveBtn----+                                            |
+    *    |  |   Cancel  | |    Save   |                                            |
+    *    |  +-----------+ +-----------+                                            |
+    * ___|_________________________________________________________________________|___
+    *    |                                                                         |
+    *    |  +-------------------------------------------------------------------+  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  |                                                                   |  |
+    *    |  +-------------------------------------------------------------------+  |
+    * ___|_________________________________________________________________________|___
+    *    |  +-CancelBtn-+ +SaveBtn----+                                            |
+    *    |  |   Cancel  | |    Save   |                                            |
+    *    |  +-----------+ +-----------+                                            |
+    *    |                                                                         |
+    *    +-------------------------------------------------------------------------+
+    *
+    */
 }
 
