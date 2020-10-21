@@ -3,6 +3,19 @@ function rtfe_dom_find (id) {
    return document.getElementById (id);
 }
 
+function rtfe_element_find (element, id) {
+   if (element.id == id)
+      return element;
+
+   for (var i=0; i<element.childNodes.length; i++) {
+      var found = rtfe_element_find (element.childNodes[i], id);
+      if (found)
+         return found;
+   }
+
+   return null;
+}
+
 function rtfe_dom_new (parent_id, id, node_type) {
    var new_node = document.createElement (node_type);
    new_node.id = id;
@@ -316,14 +329,34 @@ function rtfe_rtfe (id, name, properties) {
 
    // TODO: caller must supply images for the buttons, or accept the text that we use.
    properties = rtfe_set_props (properties,
-                                [ "outer_grid_class", "NewClass"  ],
-                                [ "outer_grid_tc",    "NewTC"     ],
-                                [ "processed",        true        ]
+                                [ "outer_grid_class",             "rtfe-grid"          ],
+                                [ "tb_grid_class",                "toolbar-grid"       ],
+                                [ "tb_fontsel_class",             "toolbar-fontsel"    ],
+                                [ "tb_fontsize_class",            "toolbar-fontsize"   ],
+                                [ "tb_bg_class",                  "toolbar-bg"         ],
+                                [ "tb_fg_class",                  "toolbar-fg"         ],
+                                [ "tb_bold_class",                "toolbar-bold"       ],
+                                [ "tb_underline_class",           "toolbar-underline"  ],
+                                [ "tb_italic_class",              "toolbar-italic"     ],
+                                [ "tb_leftj_class",               "toolbar-leftj"      ],
+                                [ "tb_fullj_class",               "toolbar-fullj"      ],
+                                [ "tb_rightj_class",              "toolbar-rightj"     ],
+                                [ "tb_ulist_class",               "toolbar-ulist"      ],
+                                [ "tb_olist_class",               "toolbar-olist"      ],
+                                [ "top_btns_grid_class",          "top-btns-grid"      ],
+                                [ "top_btns_cancel_class",        "top-btns-cancel"    ],
+                                [ "top_btns_save_class",          "top-btns-save"      ],
+                                [ "input_grid_class",             "input-grid"         ],
+                                [ "input_area_class",             "input-area"         ],
+                                [ "bottom_btns_grid_class",       "bottom-btns-grid"   ],
+                                [ "bottom_btns_cancel_class",     "bottom-btns-cancel" ],
+                                [ "bottom_btns_save_class",       "bottom-btns-save"   ],
+                                [ "sentinel",                     "none"               ]
                                );
 
    var ret =
       rtfe_grid_container (id, "auto", "1fr",
-         rtfe_quickgrid (id + "-tbgrid", "auto", "100px 80px 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr",
+         rtfe_quickgrid (id + "-tbgrid", "auto", "100px 80px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 1fr",
             rtfe_form_select (id + "-fontsel", "FontSel", 1, "",
                rtfe_form_select_option ("", "Font1", "Font1"),
                rtfe_form_select_option ("", "Font2", "Font2"),
@@ -337,25 +370,46 @@ function rtfe_rtfe (id, name, properties) {
                rtfe_form_select_option ("", "s14", "14")),
             rtfe_form_colorpicker (id + "-bgcolor", "bgcolor", "BG", "white"),
             rtfe_form_colorpicker (id + "-fgcolor", "fgcolor", "FG", "black"),
-            rtfe_form_button (id + "-bold", "<b>B</b>", null),
-            rtfe_form_button (id + "-italic", "<i>I</i>", null),
-            rtfe_form_button (id + "-underline", "<u>U</u>", null),
-            rtfe_form_button (id + "-left-just", "꜔", null),
-            rtfe_form_button (id + "-right-just", "˧", null),
-            rtfe_form_button (id + "-full-just", "꜔˧", null),
+            rtfe_form_button (id + "-bold", "", null),
+            rtfe_form_button (id + "-italic", "", null),
+            rtfe_form_button (id + "-underline", "", null),
+            rtfe_form_button (id + "-left-just", "", null),
+            rtfe_form_button (id + "-right-just", "", null),
+            rtfe_form_button (id + "-full-just", "", null),
             rtfe_form_button (id + "-ul", "UL", null),
             rtfe_form_button (id + "-ol", "OL", null)),
-         rtfe_quickgrid (id + "-tbgrid", "auto", "200px 200px",
+         rtfe_quickgrid (id + "-tbtn_grid", "auto", "200px 200px",
             rtfe_form_button (id + "-cancel-top", "Cancel", null),
             rtfe_form_button (id + "-save-top", "Save", null)),
          rtfe_form_textarea (id + "-textarea", name + "-textarea", properties.textarea_rows,
                                                                    properties.textarea_cols),
-         rtfe_quickgrid (id + "-tbgrid", "auto", "200px 200px",
-            rtfe_form_button (id + "-cancel-top", "Cancel", null),
-            rtfe_form_button (id + "-save-top", "Save", null)));
+         rtfe_quickgrid (id + "-bbtn-grid", "auto", "200px 200px",
+            rtfe_form_button (id + "-cancel-bottom", "Cancel", null),
+            rtfe_form_button (id + "-save-bottom", "Save", null)));
 
+   rtfe_element_find (ret, id).classList.add (properties.outer_grid_class);
+   rtfe_element_find (ret, id + "-tbgrid").classList.add (properties.tb_grid_class);
+   rtfe_element_find (ret, id + "-fontsel").classList.add (properties.tb_fontsel_class);
+   rtfe_element_find (ret, id + "-fontsize").classList.add (properties.tb_fontsize_class);
+   rtfe_element_find (ret, id + "-bgcolor").classList.add (properties.tb_bg_class);
+   rtfe_element_find (ret, id + "-fgcolor").classList.add (properties.tb_fg_class);
+   rtfe_element_find (ret, id + "-bold").classList.add (properties.tb_bold_class);
+   rtfe_element_find (ret, id + "-underline").classList.add (properties.tb_underline_class);
+   rtfe_element_find (ret, id + "-italic").classList.add (properties.tb_italic_class);
+   rtfe_element_find (ret, id + "-left-just").classList.add (properties.tb_leftj_class);
+   rtfe_element_find (ret, id + "-full-just").classList.add (properties.tb_fullj_class);
+   rtfe_element_find (ret, id + "-right-just").classList.add (properties.tb_rightj_class);
+   rtfe_element_find (ret, id + "-ul").classList.add (properties.tb_ulist_class);
+   rtfe_element_find (ret, id + "-ol").classList.add (properties.tb_olist_class);
+   rtfe_element_find (ret, id + "-ol").classList.add (properties.tb_olist_class);
+   rtfe_element_find (ret, id + "-tbtn_grid").classList.add (properties.top_btns_grid_class);
+   rtfe_element_find (ret, id + "-cancel-top").classList.add (properties.top_btns_cancel_class);
+   rtfe_element_find (ret, id + "-save-top").classList.add (properties.top_btns_save_class);
+   rtfe_element_find (ret, id + "-bbtn-grid").classList.add (properties.bottom_btns_grid_class);
+   rtfe_element_find (ret, id + "-cancel-bottom").classList.add (properties.bottom_btns_cancel_class);
+   rtfe_element_find (ret, id + "-save-bottom").classList.add (properties.bottom_btns_save_class);
 
-   ret.classList.add (properties.outer_grid_class);
+top
    return ret;
 
 }

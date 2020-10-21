@@ -19,5 +19,137 @@
 .outline {
    border: 1px solid grey;
    border-collapse: separate;
-   border-spacing: 10px;
 }
+
+.rtfe-grid {
+   border: 1px solid red;
+   border-collapse: separate;
+}
+
+.toolbar-grid {
+   border: 1px solid blue;
+   border-collapse: separate;
+}
+
+.toolbar-fontsel {
+   font-family:   Helvetica;
+}
+
+.toolbar-fontsize {
+   font-family:   Courier;
+}
+
+.toolbar-bg {
+   width:   64px;
+}
+
+.toolbar-fg {
+   width:   64px;
+}
+
+.toolbar-bold {
+   background-image: url("bold.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-underline {
+   background-image: url("underline.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-italic {
+   background-image: url("italic.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-leftj {
+   background-image: url("leftj.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-fullj {
+   background-image: url("fullj.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-rightj {
+   background-image: url("rightj.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-ulist {
+   background-image: url ("ulist.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.toolbar-olist {
+   background-image: url ("olist.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             32px;
+}
+
+.top-btns-grid {
+   border: 1px solid green;
+   border-collapse: separate;
+}
+
+.top-btns-cancel {
+   background-image: url ("cancel.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             128px;
+}
+
+.top-btns-save {
+   background-image: url ("save.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             128px;
+}
+
+.input-grid {
+   border: 1px solid orange;
+   border-collapse: separate;
+}
+
+.input-area {
+   background-color: grey;
+}
+
+.bottom-btns-grid {
+   border: 1px solid cyan;
+   border-collapse: separate;
+}
+
+.bottom-btns-cancel {
+   background-image: url ("cancel.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             128px;
+}
+
+.bottom-btns-save {
+   background-image: url ("save.png");
+   background-size:  contain;
+   background-repeat: no-repeat;
+   width:             128px;
+}
+
+.none {
+}
+
