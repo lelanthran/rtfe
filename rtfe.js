@@ -351,12 +351,14 @@ function rtfe_rtfe (id, name, properties) {
                                 [ "bottom_btns_grid_class",       "bottom-btns-grid"   ],
                                 [ "bottom_btns_cancel_class",     "bottom-btns-cancel" ],
                                 [ "bottom_btns_save_class",       "bottom-btns-save"   ],
+                                [ "textarea_rows",                "20"                 ],
+                                [ "textarea_cols",                "20"                 ],
                                 [ "sentinel",                     "none"               ]
                                );
 
    var ret =
       rtfe_grid_container (id, "auto", "1fr",
-         rtfe_quickgrid (id + "-tbgrid", "auto", "100px 80px 64px 64px 64px 64px 64px 64px 64px 64px 64px 64px 1fr",
+         rtfe_quickgrid (id + "-tbgrid", "auto", "100px 80px 64px 64px 32px 32px 32px 32px 32px 32px 32px 32px 1fr",
             rtfe_form_select (id + "-fontsel", "FontSel", 1, "",
                rtfe_form_select_option ("", "Font1", "Font1"),
                rtfe_form_select_option ("", "Font2", "Font2"),
@@ -378,12 +380,12 @@ function rtfe_rtfe (id, name, properties) {
             rtfe_form_button (id + "-full-just", "", null),
             rtfe_form_button (id + "-ul", "UL", null),
             rtfe_form_button (id + "-ol", "OL", null)),
-         rtfe_quickgrid (id + "-tbtn_grid", "auto", "200px 200px",
+         rtfe_quickgrid (id + "-tbtn_grid", "auto", "150px 150px",
             rtfe_form_button (id + "-cancel-top", "Cancel", null),
             rtfe_form_button (id + "-save-top", "Save", null)),
          rtfe_form_textarea (id + "-textarea", name + "-textarea", properties.textarea_rows,
                                                                    properties.textarea_cols),
-         rtfe_quickgrid (id + "-bbtn-grid", "auto", "200px 200px",
+         rtfe_quickgrid (id + "-bbtn-grid", "auto", "150px 150px",
             rtfe_form_button (id + "-cancel-bottom", "Cancel", null),
             rtfe_form_button (id + "-save-bottom", "Save", null)));
 

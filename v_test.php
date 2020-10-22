@@ -206,10 +206,8 @@ var fields = [
 // apply (root, fields, "id1", "id2", "id3");
 
 var properties = {
-"outer_grid_class":     "OldClass",
-"outer_grid_tc":        "OldTC",
 "textarea_rows":        "25",
-"textarea_cols":        "200",
+"textarea_cols":        "20",
 };
 
 var editor_component = rtfe_rtfe ("id", "name", properties);

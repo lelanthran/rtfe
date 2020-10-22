@@ -28,7 +28,7 @@
 
 .toolbar-grid {
    border: 1px solid blue;
-   border-collapse: separate;
+   border-collapse: collapse;
 }
 
 .toolbar-fontsel {
