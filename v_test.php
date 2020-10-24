@@ -206,14 +206,15 @@ var fields = [
 // apply (root, fields, "id1", "id2", "id3");
 
 var properties = {
-"textarea_rows":        "25",
-"textarea_cols":        "20",
+"editbox_width":        "250px",
+"editbox_height":       "200px",
 };
 
 var editor_component = rtfe_rtfe ("id", "name", properties);
 
 rtfe_append ("main", editor_component);
 
+console.log ("Done");
 
    </script>
 </body>

@@ -139,6 +139,15 @@ function rtfe_form_file (id, name, filter, multiple) {
    return new_node;
 }
 
+function rtfe_form_editbox (id, name, width, height) {
+   var new_node = rtfe_component (id, "div", "");
+   new_node.name = name;
+   new_node.contentEditable = true;
+   new_node.style.width = width;
+   new_node.style.height = height;
+   return new_node;
+}
+
 function rtfe_grid_container (id, rowspec, colspec) {
    var new_node = document.createElement ("div");
    new_node.id = id;
@@ -291,6 +300,23 @@ function rtfe_form_textarea (id, name, rows, cols) {
    return new_node;
 }
 
+function rtfe_setde (el, id, cmd, vfunc) {
+   rtfe_element_find (el, id).onclick = function () {
+                                          document.execCommand (cmd, vfunc ());
+                                        };
+}
+
+function rtfe_get_value (id) {
+   var el = document.getElementById (id);
+   var value = '';
+      console.log (el.value);
+   if (el.type === 'select') {
+      console.log (el.value);
+      return el.value;
+   }
+   return value;
+}
+
 function rtfe_set_props (properties) {
    for (var i=1; i<arguments.length; i++) {
       if (!(properties.hasOwnProperty (arguments[i][0]))) {
@@ -351,8 +377,8 @@ function rtfe_rtfe (id, name, properties) {
                                 [ "bottom_btns_grid_class",       "bottom-btns-grid"   ],
                                 [ "bottom_btns_cancel_class",     "bottom-btns-cancel" ],
                                 [ "bottom_btns_save_class",       "bottom-btns-save"   ],
-                                [ "textarea_rows",                "20"                 ],
-                                [ "textarea_cols",                "20"                 ],
+                                [ "editbox_width",                "200px"              ],
+                                [ "editbox_height",               "200px"              ],
                                 [ "sentinel",                     "none"               ]
                                );
 
@@ -360,16 +386,16 @@ function rtfe_rtfe (id, name, properties) {
       rtfe_grid_container (id, "auto", "1fr",
          rtfe_quickgrid (id + "-tbgrid", "auto", "100px 80px 64px 64px 32px 32px 32px 32px 32px 32px 32px 32px 1fr",
             rtfe_form_select (id + "-fontsel", "FontSel", 1, "",
-               rtfe_form_select_option ("", "Font1", "Font1"),
-               rtfe_form_select_option ("", "Font2", "Font2"),
-               rtfe_form_select_option ("", "Font3", "Font3"),
-               rtfe_form_select_option ("", "Font4", "Font4")),
+               rtfe_form_select_option ("", "Helvetica", "Helvetica"),
+               rtfe_form_select_option ("", "Arial", "Arial"),
+               rtfe_form_select_option ("", "Courier", "Courier"),
+               rtfe_form_select_option ("", "Times New Roman", "Times New Roman")),
             rtfe_form_select (id + "-fontsize", "FontSize", 1, "",
-               rtfe_form_select_option ("", "s10", "10"),
-               rtfe_form_select_option ("", "s11", "11"),
-               rtfe_form_select_option ("", "s12", "12"),
-               rtfe_form_select_option ("", "s13", "13"),
-               rtfe_form_select_option ("", "s14", "14")),
+               rtfe_form_select_option ("", "7", "7"),
+               rtfe_form_select_option ("", "8", "8"),
+               rtfe_form_select_option ("", "9", "9"),
+               rtfe_form_select_option ("", "10", "10"),
+               rtfe_form_select_option ("", "11", "11")),
             rtfe_form_colorpicker (id + "-bgcolor", "bgcolor", "BG", "#000000"),
             rtfe_form_colorpicker (id + "-fgcolor", "fgcolor", "FG", "#ffffff"),
             rtfe_form_button (id + "-bold", "", null),
@@ -383,8 +409,8 @@ function rtfe_rtfe (id, name, properties) {
          rtfe_quickgrid (id + "-tbtn_grid", "auto", "150px 150px",
             rtfe_form_button (id + "-cancel-top", "Cancel", null),
             rtfe_form_button (id + "-save-top", "Save", null)),
-         rtfe_form_textarea (id + "-textarea", name + "-textarea", properties.textarea_rows,
-                                                                   properties.textarea_cols),
+         rtfe_form_editbox (id + "-editbox", name + "-editbox", properties.editbox_width,
+                                                                properties.editbox_height),
          rtfe_quickgrid (id + "-bbtn-grid", "auto", "150px 150px",
             rtfe_form_button (id + "-cancel-bottom", "Cancel", null),
             rtfe_form_button (id + "-save-bottom", "Save", null)));
@@ -403,7 +429,6 @@ function rtfe_rtfe (id, name, properties) {
    rtfe_element_find (ret, id + "-right-just").classList.add (properties.tb_rightj_class);
    rtfe_element_find (ret, id + "-ul").classList.add (properties.tb_ulist_class);
    rtfe_element_find (ret, id + "-ol").classList.add (properties.tb_olist_class);
-   rtfe_element_find (ret, id + "-ol").classList.add (properties.tb_olist_class);
    rtfe_element_find (ret, id + "-tbtn_grid").classList.add (properties.top_btns_grid_class);
    rtfe_element_find (ret, id + "-cancel-top").classList.add (properties.top_btns_cancel_class);
    rtfe_element_find (ret, id + "-save-top").classList.add (properties.top_btns_save_class);
@@ -411,7 +436,20 @@ function rtfe_rtfe (id, name, properties) {
    rtfe_element_find (ret, id + "-cancel-bottom").classList.add (properties.bottom_btns_cancel_class);
    rtfe_element_find (ret, id + "-save-bottom").classList.add (properties.bottom_btns_save_class);
 
-top
+   console.log ("Done");
+   rtfe_element_find (ret, id + "-fontsel").onchange = function () { console.log ("select " + rtfe_dom_find (id + "-fontsel").value); };
+   rtfe_setde (ret, id + "-fontsel",    'fontSize',            function () { return rtfe_dom_find (id + "-fontsel").value; });
+   rtfe_setde (ret, id + "-fontsize",   'fontName',            function () { return rtfe_dom_find (id + "-fontsize").value; });
+   rtfe_setde (ret, id + "-bgcolor",    'backColor',           function () { return rtfe_dom_find (id + "-bgcolor").value; });
+   rtfe_setde (ret, id + "-fgcolor",    'foreColor',           function () { return rtfe_dom_find (id + "-fgcolor").value; });
+   rtfe_setde (ret, id + "-bold",       'bold',                function () { return rtfe_dom_find (id + "-bold").value; });
+   rtfe_setde (ret, id + "-underline",  'underline',           function () { return rtfe_dom_find (id + "-underline").value; });
+   rtfe_setde (ret, id + "-italic",     'italic',              function () { return rtfe_dom_find (id + "-italic").value; });
+   rtfe_setde (ret, id + "-left-just",  'justifyLeft',         function () { return rtfe_dom_find (id + "-left-just").value; });
+   rtfe_setde (ret, id + "-full-just",  'justifyFull',         function () { return rtfe_dom_find (id + "-full-just").value; });
+   rtfe_setde (ret, id + "-right-just", 'justifyRight',        function () { return rtfe_dom_find (id + "-right-just").value; });
+   rtfe_setde (ret, id + "-ul",         'insertUnorderedList', function () { return rtfe_dom_find (id + "-ul").value; });
+   rtfe_setde (ret, id + "-ol",         'insertOrderedList',   function () { return rtfe_dom_find (id + "-ol").value; });
    return ret;
 
 }
