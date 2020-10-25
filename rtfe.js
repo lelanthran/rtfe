@@ -436,8 +436,7 @@ function rtfe_rtfe (id, name, properties) {
    rtfe_element_find (ret, id + "-cancel-bottom").classList.add (properties.bottom_btns_cancel_class);
    rtfe_element_find (ret, id + "-save-bottom").classList.add (properties.bottom_btns_save_class);
 
-   console.log ("Done");
-   rtfe_element_find (ret, id + "-fontsel").onchange = function () { console.log ("select " + rtfe_dom_find (id + "-fontsel").value); };
+   rtfe_element_find (ret, id + "-fontsel").onchange = function () { document.execCommand ('fontName', false, rtfe_dom_find (id + "-fontsel").value); };
    rtfe_setde (ret, id + "-fontsel",    'fontSize',            function () { return rtfe_dom_find (id + "-fontsel").value; });
    rtfe_setde (ret, id + "-fontsize",   'fontName',            function () { return rtfe_dom_find (id + "-fontsize").value; });
    rtfe_setde (ret, id + "-bgcolor",    'backColor',           function () { return rtfe_dom_find (id + "-bgcolor").value; });
