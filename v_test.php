@@ -216,6 +216,9 @@ rtfe_append ("main", editor_component);
 
 console.log ("Done");
 
+rtfe_append ("main", rtfe_form_pushbutton ("test-pb", "NoName", "down"));
+rtfe_append ("main", rtfe_form_pushbutton ("test-pb", "NoName", "up"));
+
    </script>
 </body>
 </html>

@@ -54,6 +54,21 @@ function rtfe_form_button (id, text, onclick) {
    return button;
 }
 
+function rtfe_form_pushbutton (id, text, state) {
+   var button = rtfe_form_button (id, text, null);
+   button.value = false;
+   rtfe_classlist_del_by_el ("pushbutton_down", button);
+   rtfe_classlist_add_by_el ("pushbutton_up", button);
+   if (state === "down") {
+      button.value = true;
+      rtfe_classlist_del_by_el ("pushbutton_up", button);
+      rtfe_classlist_add_by_el ("pushbutton_down", button);
+   }
+
+   button.addEventListener ("click", onclick);
+   return button;
+}
+
 function rtfe_form_input (id, name, placeholder) {
    var new_node = document.createElement ("input");
    new_node.id = id;
@@ -110,6 +125,10 @@ function rtfe_form_select (id, name, size, multiple) {
    return new_node;
 }
 
+function rtfe_form_value (id) {
+   return document.getElementById (id).value;
+}
+
 function rtfe_form_select_optgroup (id, label) {
    var new_node = document.createElement ("optgroup");
    new_node.id = id;
@@ -145,6 +164,23 @@ function rtfe_form_editbox (id, name, width, height) {
    new_node.contentEditable = true;
    new_node.style.width = width;
    new_node.style.height = height;
+   return new_node;
+}
+
+function rtfe_form_colorpicker (id, name, textContent, color) {
+   var new_node = rtfe_form_input (id, name, "");
+   new_node.innerHTML = textContent;
+   new_node.type = "color";
+   new_node.value = color;
+   return new_node;
+}
+
+function rtfe_form_textarea (id, name, rows, cols) {
+   var new_node = document.createElement ("textarea");
+   new_node.id = id;
+   new_node.rows = rows;
+   new_node.cols = cols;
+
    return new_node;
 }
 
@@ -215,13 +251,45 @@ function rtfe_show (id, anim_name, anim_ms) {
 
 function rtfe_classlist_add (classname) {
    for (var i=1; i<arguments.length; i++) {
-      rtfe_dom_find (arguments[i]).classList.add (classname);
+      var el = rtfe_dom_find (arguments[i]);
+      if (el == null || el == undefined)
+         continue;
+      el.classList.add (classname);
    }
 }
 
 function rtfe_classlist_del (classname) {
    for (var i=1; i<arguments.length; i++) {
       var el = rtfe_dom_find (arguments[i]);
+      if (el == null || el == undefined)
+         continue;
+      var oldclass = el.className + "";
+      el.className = "";
+      var newclass = oldclass.replace (classname, "");
+      var newclasses = newclass.split (" ");
+      for (var i=0; i<newclasses.length; i++) {
+         newclasses[i] = newclasses[i].replace (" ", "");
+         if (newclasses[i].length <= 0)
+            continue;
+         el.classList.add (newclasses[i], el.id);
+      }
+   }
+}
+
+function rtfe_classlist_add_by_el (classname) {
+   for (var i=1; i<arguments.length; i++) {
+      var el = arguments[i];
+      if (el == null || el == undefined)
+         continue;
+      el.classList.add (classname);
+   }
+}
+
+function rtfe_classlist_del_by_el (classname) {
+   for (var i=1; i<arguments.length; i++) {
+      var el = arguments[i];
+      if (el == null || el == undefined)
+         continue;
       var oldclass = el.className + "";
       el.className = "";
       var newclass = oldclass.replace (classname, "");
@@ -283,27 +351,12 @@ function rtfe_collect_form_data (form_id) {
    return ret;
 }
 
-function rtfe_form_colorpicker (id, name, textContent, color) {
-   var new_node = rtfe_form_input (id, name, "");
-   new_node.innerHTML = textContent;
-   new_node.type = "color";
-   new_node.value = color;
-   return new_node;
-}
-
-function rtfe_form_textarea (id, name, rows, cols) {
-   var new_node = document.createElement ("textarea");
-   new_node.id = id;
-   new_node.rows = rows;
-   new_node.cols = cols;
-
-   return new_node;
-}
-
-function rtfe_setde (el, id, cmd, vfunc) {
-   rtfe_element_find (el, id).onclick = function () {
-                                          document.execCommand (cmd, vfunc ());
-                                        };
+function rtfe_setde (root, id, cmd, handler_name, handler_func) {
+   rtfe_element_find (root, id)[handler_name] =
+      function () {
+         console.log ("Setting " + cmd + " to " + handler_func (id));
+         document.execCommand (cmd, false, handler_func (id));
+      };
 }
 
 function rtfe_get_value (id) {
@@ -436,19 +489,18 @@ function rtfe_rtfe (id, name, properties) {
    rtfe_element_find (ret, id + "-cancel-bottom").classList.add (properties.bottom_btns_cancel_class);
    rtfe_element_find (ret, id + "-save-bottom").classList.add (properties.bottom_btns_save_class);
 
-   rtfe_element_find (ret, id + "-fontsel").onchange = function () { document.execCommand ('fontName', false, rtfe_dom_find (id + "-fontsel").value); };
-   rtfe_setde (ret, id + "-fontsel",    'fontSize',            function () { return rtfe_dom_find (id + "-fontsel").value; });
-   rtfe_setde (ret, id + "-fontsize",   'fontName',            function () { return rtfe_dom_find (id + "-fontsize").value; });
-   rtfe_setde (ret, id + "-bgcolor",    'backColor',           function () { return rtfe_dom_find (id + "-bgcolor").value; });
-   rtfe_setde (ret, id + "-fgcolor",    'foreColor',           function () { return rtfe_dom_find (id + "-fgcolor").value; });
-   rtfe_setde (ret, id + "-bold",       'bold',                function () { return rtfe_dom_find (id + "-bold").value; });
-   rtfe_setde (ret, id + "-underline",  'underline',           function () { return rtfe_dom_find (id + "-underline").value; });
-   rtfe_setde (ret, id + "-italic",     'italic',              function () { return rtfe_dom_find (id + "-italic").value; });
-   rtfe_setde (ret, id + "-left-just",  'justifyLeft',         function () { return rtfe_dom_find (id + "-left-just").value; });
-   rtfe_setde (ret, id + "-full-just",  'justifyFull',         function () { return rtfe_dom_find (id + "-full-just").value; });
-   rtfe_setde (ret, id + "-right-just", 'justifyRight',        function () { return rtfe_dom_find (id + "-right-just").value; });
-   rtfe_setde (ret, id + "-ul",         'insertUnorderedList', function () { return rtfe_dom_find (id + "-ul").value; });
-   rtfe_setde (ret, id + "-ol",         'insertOrderedList',   function () { return rtfe_dom_find (id + "-ol").value; });
+   rtfe_setde (ret, id + '-fontsel',    'fontName',            'onchange', rtfe_form_value);
+   rtfe_setde (ret, id + "-fontsize",   'fontSize',            'onchange', rtfe_form_value);
+   rtfe_setde (ret, id + "-bgcolor",    'backColor',           'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-fgcolor",    'foreColor',           'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-bold",       'bold',                'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-underline",  'underline',           'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-italic",     'italic',              'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-left-just",  'justifyLeft',         'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-full-just",  'justifyFull',         'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-right-just", 'justifyRight',        'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-ul",         'insertUnorderedList', 'onclick',  rtfe_form_value);
+   rtfe_setde (ret, id + "-ol",         'insertOrderedList',   'onclick',  rtfe_form_value);
    return ret;
 
 }
