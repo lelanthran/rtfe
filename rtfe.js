@@ -54,18 +54,30 @@ function rtfe_form_button (id, text, onclick) {
    return button;
 }
 
-function rtfe_form_pushbutton (id, text, state) {
-   var button = rtfe_form_button (id, text, null);
-   button.value = false;
-   rtfe_classlist_del_by_el ("pushbutton_down", button);
-   rtfe_classlist_add_by_el ("pushbutton_up", button);
-   if (state === "down") {
-      button.value = true;
+function rtfe_form_pushbutton_value (button, value) {
+   if (value == true) {
+      button.value = false;
       rtfe_classlist_del_by_el ("pushbutton_up", button);
       rtfe_classlist_add_by_el ("pushbutton_down", button);
    }
+   if (value == false) {
+      button.value = true;
+      rtfe_classlist_del_by_el ("pushbutton_down", button);
+      rtfe_classlist_add_by_el ("pushbutton_up", button);
+   }
 
-   button.addEventListener ("click", onclick);
+   return button.value;
+}
+
+function rtfe_form_pushbutton (id, text, value) {
+   var button = rtfe_form_button (id, text, null);
+   rtfe_form_pushbutton_value (button, value);
+   button.onclick =
+      function (ev) {
+         var new_value = !!!button.value;
+         console.log (button.innerHTML + ":" + button.value + ":" + new_value);
+         rtfe_form_pushbutton_value (button, new_value);
+      };
    return button;
 }
 
