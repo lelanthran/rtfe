@@ -54,30 +54,42 @@ function rtfe_form_button (id, text, onclick) {
    return button;
 }
 
-function rtfe_form_pushbutton_value (button, value) {
-   if (value == true) {
-      button.value = false;
+function rtfe_form_pushbutton_set (button, checked) {
+   if (checked == true) {
+      button.checked = true;
       rtfe_classlist_del_by_el ("pushbutton_up", button);
       rtfe_classlist_add_by_el ("pushbutton_down", button);
+      if (button.oncheck != undefined && button.unchecked != null) {
+         button.oncheck (button);
+      }
    }
-   if (value == false) {
-      button.value = true;
+   if (checked == false) {
+      button.checked = false;
       rtfe_classlist_del_by_el ("pushbutton_down", button);
       rtfe_classlist_add_by_el ("pushbutton_up", button);
+      if (button.onuncheck != undefined && button.unchecked != null) {
+         button.onuncheck (button);
+      }
    }
 
-   return button.value;
+   if (button.onchange != undefined && button.unchecked != null) {
+      button.onchange (button, button.checked);
+   }
+   console.log ("Tried to set checked to " + checked + ": " + button.checked);
+   return button.checked;
 }
 
-function rtfe_form_pushbutton (id, text, value) {
+function rtfe_form_pushbutton (id, text, checked) {
    var button = rtfe_form_button (id, text, null);
-   rtfe_form_pushbutton_value (button, value);
+   rtfe_form_pushbutton_set (button, checked);
    button.onclick =
       function (ev) {
-         var new_value = !!!button.value;
-         console.log (button.innerHTML + ":" + button.value + ":" + new_value);
-         rtfe_form_pushbutton_value (button, new_value);
+         var new_checked = !button.checked;
+         console.log (button.innerHTML + ":" + button.checked + ":" + new_checked);
+         rtfe_form_pushbutton_set (button, new_checked);
+         console.log ("Button status: " + button.innerHTML + " : " + button.checked);
       };
+   console.log ("Created: " + button.innerHTML + ":" + button.checked);
    return button;
 }
 
